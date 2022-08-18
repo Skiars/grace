@@ -10,6 +10,7 @@ module Grace.Value
     ) where
 
 import Data.Aeson (FromJSON(..))
+import Data.Aeson.KeyMap (toHashMapText)
 import Data.Foldable (toList)
 import Data.HashMap.Strict.InsOrd (InsOrdHashMap)
 import Data.Sequence (Seq)
@@ -104,7 +105,7 @@ instance IsString Value where
 instance FromJSON Value where
     parseJSON (Aeson.Object object) = do
         values <- traverse parseJSON object
-        pure (Record (HashMap.fromHashMap values))
+        pure (Record (HashMap.fromHashMap (toHashMapText values)))
     parseJSON (Aeson.Array array) = do
         values <- traverse parseJSON array
         pure (List (Seq.fromList (toList values)))
